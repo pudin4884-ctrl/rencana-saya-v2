@@ -9,7 +9,6 @@ export default function Editor() {
   const [tema, setTema] = useState<"light" | "dark">("light");
   const editor: any = useCreateBlockNote();
 
-  // Memuat data tersimpan agar ketikan tidak hilang saat refresh
   useEffect(() => {
     const data = localStorage.getItem("my-bigplan-storage");
     if (data && editor) {
@@ -20,23 +19,34 @@ export default function Editor() {
   return (
     <div style={{ 
       display: "flex", 
+      flexDirection: "row", // Default menyamping untuk laptop
       height: "100vh", 
       backgroundColor: tema === "light" ? "#ffffff" : "#191919", 
       color: tema === "light" ? "#37352f" : "#d4d4d4",
       fontFamily: "'Inter', sans-serif" 
     }}>
       
-      {/* SIDEBAR (Mirip Lovable) */}
-      <div style={{ 
+      {/* SIDEBAR RESPONSIF */}
+      <style>{`
+        @media (max-width: 768px) {
+          .sidebar-custom { width: 60px !important; padding: 20px 5px !important; }
+          .sidebar-text { display: none; } /* Sembunyikan tulisan di HP agar tidak sempit */
+          .content-area { padding: 40px 20px !important; }
+          .title-text { fontSize: 28px !important; }
+        }
+      `}</style>
+
+      <div className="sidebar-custom" style={{ 
         width: "240px", 
         backgroundColor: tema === "light" ? "#f7f7f5" : "#202020", 
         padding: "24px 12px", 
         borderRight: "1px solid rgba(0,0,0,0.05)",
         display: "flex",
         flexDirection: "column",
-        gap: "10px"
+        gap: "10px",
+        transition: "width 0.3s"
       }}>
-        <p style={{ fontSize: "11px", fontWeight: "700", color: "#91918e", paddingLeft: "12px", letterSpacing: "0.5px" }}>
+        <p className="sidebar-text" style={{ fontSize: "11px", fontWeight: "700", color: "#91918e", paddingLeft: "12px", letterSpacing: "0.5px" }}>
           WORKSPACE
         </p>
         <div style={{ 
@@ -46,10 +56,10 @@ export default function Editor() {
           fontSize: "14px",
           fontWeight: "600",
           display: "flex",
-          alignItems: "center",
-          gap: "8px"
+          justifyContent: "center",
+          alignItems: "center"
         }}>
-          🎯 My Big Plan
+          🎯 <span className="sidebar-text" style={{marginLeft: "8px"}}>My Plan</span>
         </div>
         
         <button 
@@ -57,7 +67,6 @@ export default function Editor() {
           style={{ 
             marginTop: "auto", 
             padding: "8px", 
-            fontSize: "12px", 
             cursor: "pointer", 
             borderRadius: "6px", 
             border: "1px solid rgba(0,0,0,0.1)",
@@ -65,23 +74,17 @@ export default function Editor() {
             color: "inherit"
           }}
         >
-          {tema === "light" ? "🌙 Dark Mode" : "☀️ Light Mode"}
+          {tema === "light" ? "🌙" : "☀️"}
         </button>
       </div>
 
-      {/* AREA KONTEN (Putih Bersih) */}
-      <div style={{ flex: 1, overflowY: "auto" }}>
-        <div style={{ maxWidth: "750px", margin: "0 auto", padding: "80px 40px" }}>
-          <h1 style={{ 
-            fontSize: "42px", 
-            fontWeight: "800", 
-            marginBottom: "20px",
-            letterSpacing: "-0.5px"
-          }}>
+      {/* AREA KONTEN */}
+      <div className="content-area" style={{ flex: 1, overflowY: "auto", padding: "60px 40px" }}>
+        <div style={{ maxWidth: "750px", margin: "0 auto" }}>
+          <h1 className="title-text" style={{ fontSize: "42px", fontWeight: "800", marginBottom: "20px" }}>
             🎯 My Big Plan
           </h1>
-          
-          <div style={{ marginLeft: "-45px" }}> {/* Menyesuaikan posisi kursor agar sejajar judul */}
+          <div style={{ marginLeft: "-10px" }}> 
             <BlockNoteView 
               editor={editor} 
               theme={tema} 
