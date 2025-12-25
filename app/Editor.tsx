@@ -19,72 +19,92 @@ export default function Editor() {
   return (
     <div style={{ 
       display: "flex", 
-      flexDirection: "row", // Default menyamping untuk laptop
       height: "100vh", 
-      backgroundColor: tema === "light" ? "#ffffff" : "#191919", 
+      backgroundColor: tema === "light" ? "#fbfbfa" : "#191919", 
       color: tema === "light" ? "#37352f" : "#d4d4d4",
-      fontFamily: "'Inter', sans-serif" 
+      fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" 
     }}>
       
-      {/* SIDEBAR RESPONSIF */}
+      {/* CSS CUSTOM UNTUK SIDEBAR MOBILE & TAMPILAN PREMIUM */}
       <style>{`
         @media (max-width: 768px) {
-          .sidebar-custom { width: 60px !important; padding: 20px 5px !important; }
-          .sidebar-text { display: none; } /* Sembunyikan tulisan di HP agar tidak sempit */
-          .content-area { padding: 40px 20px !important; }
-          .title-text { fontSize: 28px !important; }
+          .sidebar-custom { position: fixed; bottom: 0; width: 100% !important; height: 60px !important; flex-direction: row !important; padding: 0 20px !important; z-index: 100; border-top: 1px solid rgba(0,0,0,0.05); border-right: none !important; }
+          .sidebar-text, .workspace-label { display: none !important; }
+          .content-area { padding-bottom: 80px !important; }
         }
+        .bn-editor { padding-inline: 0 !important; }
+        .bn-container { background: transparent !important; }
       `}</style>
 
+      {/* SIDEBAR */}
       <div className="sidebar-custom" style={{ 
-        width: "240px", 
+        width: "260px", 
         backgroundColor: tema === "light" ? "#f7f7f5" : "#202020", 
-        padding: "24px 12px", 
+        padding: "30px 16px", 
         borderRight: "1px solid rgba(0,0,0,0.05)",
         display: "flex",
         flexDirection: "column",
-        gap: "10px",
-        transition: "width 0.3s"
+        gap: "4px"
       }}>
-        <p className="sidebar-text" style={{ fontSize: "11px", fontWeight: "700", color: "#91918e", paddingLeft: "12px", letterSpacing: "0.5px" }}>
-          WORKSPACE
-        </p>
+        <p className="workspace-label" style={{ fontSize: "11px", fontWeight: "600", color: "rgba(55, 53, 47, 0.4)", paddingLeft: "10px", marginBottom: "10px", letterSpacing: "0.5px" }}>WORKSPACE</p>
+        
         <div style={{ 
-          padding: "8px 12px", 
-          backgroundColor: tema === "light" ? "rgba(0,0,0,0.04)" : "rgba(255,255,255,0.05)", 
+          padding: "8px 10px", 
+          backgroundColor: tema === "light" ? "white" : "rgba(255,255,255,0.05)", 
           borderRadius: "6px", 
           fontSize: "14px",
-          fontWeight: "600",
+          fontWeight: "500",
           display: "flex",
-          justifyContent: "center",
-          alignItems: "center"
+          alignItems: "center",
+          gap: "10px",
+          boxShadow: "0 1px 3px rgba(0,0,0,0.05)",
+          cursor: "pointer"
         }}>
-          🎯 <span className="sidebar-text" style={{marginLeft: "8px"}}>My Plan</span>
+          <span style={{fontSize: "18px"}}>🎯</span>
+          <span className="sidebar-text">My Big Plan</span>
         </div>
         
         <button 
           onClick={() => setTema(tema === "light" ? "dark" : "light")}
           style={{ 
             marginTop: "auto", 
-            padding: "8px", 
+            padding: "10px", 
+            fontSize: "13px", 
             cursor: "pointer", 
-            borderRadius: "6px", 
-            border: "1px solid rgba(0,0,0,0.1)",
-            background: "transparent",
-            color: "inherit"
+            borderRadius: "8px", 
+            border: "1px solid rgba(0,0,0,0.08)",
+            backgroundColor: tema === "light" ? "white" : "#2f2f2f",
+            color: "inherit",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: "8px"
           }}
         >
-          {tema === "light" ? "🌙" : "☀️"}
+          {tema === "light" ? "🌙 Dark Mode" : "☀️ Light Mode"}
         </button>
       </div>
 
-      {/* AREA KONTEN */}
-      <div className="content-area" style={{ flex: 1, overflowY: "auto", padding: "60px 40px" }}>
-        <div style={{ maxWidth: "750px", margin: "0 auto" }}>
-          <h1 className="title-text" style={{ fontSize: "42px", fontWeight: "800", marginBottom: "20px" }}>
-            🎯 My Big Plan
-          </h1>
-          <div style={{ marginLeft: "-10px" }}> 
+      {/* MAIN CONTENT AREA */}
+      <div className="content-area" style={{ flex: 1, overflowY: "auto", position: "relative" }}>
+        <div style={{ maxWidth: "720px", margin: "0 auto", padding: "80px 40px" }}>
+          
+          {/* JUDUL BESAR */}
+          <div style={{ marginBottom: "40px" }}>
+            <div style={{ fontSize: "70px", marginBottom: "10px" }}>🎯</div>
+            <h1 style={{ 
+              fontSize: "45px", 
+              fontWeight: "700", 
+              letterSpacing: "-1.2px",
+              lineHeight: "1.2",
+              outline: "none"
+            }} contentEditable suppressContentEditableWarning>
+              My Big Plan
+            </h1>
+          </div>
+          
+          {/* EDITOR */}
+          <div style={{ marginLeft: "-40px" }}>
             <BlockNoteView 
               editor={editor} 
               theme={tema} 
